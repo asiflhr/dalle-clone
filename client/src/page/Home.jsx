@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import { Card, FormField, Loader } from "../components";
 
 const RenderCards = ({ data, title }) => {
@@ -17,14 +18,14 @@ const Home = () => {
 
   const [searchText, setSearchText] = useState("");
   const [searchTimeout, setSearchTimeout] = useState(null);
-  const [searchResults, setSearchResults] = useState(null);
+  const [searchedResults, setSearchedResults] = useState(null);
 
   const fetchPosts = async () => {
     setLoading(true);
 
     try {
       const response = await fetch(
-        "http://dalle-arbb.onrender.com/api/v1/post",
+        "https://dalle-arbb.onrender.com/api/v1/post",
         {
           method: "GET",
           headers: {
@@ -54,12 +55,12 @@ const Home = () => {
 
     setSearchTimeout(
       setTimeout(() => {
-        const searResult = allPosts.filter(
+        const searchResult = allPosts.filter(
           (item) =>
             item.name.toLowerCase().includes(searchText.toLowerCase()) ||
             item.prompt.toLowerCase().includes(searchText.toLowerCase())
         );
-        setSearchResults(searResult);
+        setSearchedResults(searchResult);
       }, 500)
     );
   };
@@ -67,7 +68,7 @@ const Home = () => {
   return (
     <section className="max-w-7xl mx-auto">
       <div>
-        <h1 className="font-extrabold text-[#222328] text-[320px]">
+        <h1 className="font-extrabold text-[#222328] text-[32px]">
           The Community Showcase
         </h1>
         <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">
@@ -80,8 +81,9 @@ const Home = () => {
         <FormField
           labelName="Search posts"
           type="text"
-          name="test"
+          name="text"
           placeholder="Search something..."
+          value={searchText}
           handleChange={handleSearchChange}
         />
       </div>
@@ -95,15 +97,14 @@ const Home = () => {
           <>
             {searchText && (
               <h2 className="font-medium text-[#666e75] text-xl mb-3">
-                Showing Results for{" "}
-                <span className="text-[#222328]">{searchText}</span>
+                Showing Resuls for{" "}
+                <span className="text-[#222328]">{searchText}</span>:
               </h2>
             )}
-
             <div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
               {searchText ? (
                 <RenderCards
-                  data={searchResults}
+                  data={searchedResults}
                   title="No Search Results Found"
                 />
               ) : (
